@@ -5,20 +5,45 @@
 // Siga os comentários para implementar cada parte do desafio.
 // Aluno: Edgar Nicolau Fardin
 
+//função para verificar se a posição ja tem um navio
+int verificaElemento(int matriz[10][10], int linha, int coluna){
+    if(matriz[linha][coluna] == 0){
+        return 0;
+    }else if(matriz[linha][coluna] == 3){
+        return 1;
+    }else{
+        return -1;
+    }
+}
+
+//função para verificar se a posição é válida no tabuleiro
+int verificaPosicaoHV(int posicao, int tamanhoNavio, int tamanhoMatriz){
+    if(posicao + tamanhoNavio <= tamanhoMatriz){
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
 int main() {
-    // Nível Novato - Posicionamento dos Navios
-    // Sugestão: Declare uma matriz bidimensional para representar o tabuleiro (Ex: int tabuleiro[5][5];).
-    // Sugestão: Posicione dois navios no tabuleiro, um verticalmente e outro horizontalmente.
-    // Sugestão: Utilize `printf` para exibir as coordenadas de cada parte dos navios.
+
+    // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
+    // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
+    // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
+    // Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
+
 
     // Área para declaração de variáveis
     int tamTabuleiro = 10;
     int tabuleiro[tamTabuleiro][tamTabuleiro];
     char linha[11] = {' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
 
-    int navioH[1][2] = {{7,5}}; //coordenadas do navio na horizontal
-    int navioV[1][2] = {{4,3}}; //coordenadas do navio na vertical
+    int navioH[1][2] = {{0,0}}; //coordenadas do navio na horizontal
+    int navioV[1][2] = {{7,9}}; //coordenadas do navio na vertical
+    int navioD[2][2] = {{4,1},{2,6}}; //coordenadas dos navios na diagonal
     int tamNavio = 3; // tamanho dos navios
+
+    int resultado = 0; // para saber se posição é ocupada
 
     //inicializando tabuleiro com 0
     for (int i = 0; i < 10; i++)
@@ -30,23 +55,73 @@ int main() {
     }
 
     //Validação e Posicionamento do navio na hotizontal
-    if(navioH[0][1] + tamNavio <= tamTabuleiro){
-        for (int i = 0; i < tamNavio; i++)
+    if(verificaPosicaoHV(navioH[0][1], tamNavio, tamTabuleiro)){ // verifica posições dentro do tabuleiro       
+        resultado = 0;
+        for (int i = 0; i < tamNavio; i++)//verifica posições ocupadas
         {
+            resultado += verificaElemento(tabuleiro, navioH[0][0], navioH[0][1] + i);
+        }if(resultado == 0){
+             for (int i = 0; i < tamNavio; i++)
+            {
             tabuleiro[navioH[0][0]][navioH[0][1] + i] = 3;
-        }
-        
+            }
+         }else{
+            printf("Foi inserida um coordenada já ocupada por um navio\n");
+         }        
     }else{
         printf("Foi inserida um coordenada inválida para colocar um  navio\n");
     }
 
     //Validação e Posicionamento do navio na vertical
-    if(navioV[0][0] + tamNavio <= tamTabuleiro){
-        for (int i = 0; i < tamNavio; i++)
+    if(verificaPosicaoHV(navioV[0][0], tamNavio, tamTabuleiro)){// verifica posições dentro do tabuleiro 
+        resultado = 0;      
+        for (int i = 0; i < tamNavio; i++)//verifica posições ocupadas
         {
+            resultado += verificaElemento(tabuleiro, navioV[0][0] + i, navioV[0][1]);
+        }if(resultado == 0){
+             for (int i = 0; i < tamNavio; i++)
+            {
             tabuleiro[navioV[0][0] + i][navioV[0][1]] = 3;
-        }
-        
+            }
+         }else{
+            printf("Foi inserida um coordenada já ocupada por um navio\n");
+         }       
+    }else{
+        printf("Foi inserida um coordenada inválida para colocar um  navio\n");
+    }
+
+    //Validação e Posicionamento do navio na Diagonal
+    if(verificaPosicaoHV(navioD[0][0], tamNavio, tamTabuleiro) && verificaPosicaoHV(navioD[0][1], tamNavio, tamTabuleiro)){// verifica posições dentro do tabuleiro 
+        resultado = 0;      
+        for (int i = 0; i < tamNavio; i++)//verifica posições ocupadas
+        {
+            resultado += verificaElemento(tabuleiro, navioD[0][0] + i, navioD[0][1] + i);
+        }if(resultado == 0){
+             for (int i = 0; i < tamNavio; i++)
+            {
+            tabuleiro[navioD[0][0] + i][navioD[0][1] + i] = 3;
+            }
+         }else{
+            printf("Foi inserida um coordenada já ocupada por um navio\n");
+         }       
+    }else{
+        printf("Foi inserida um coordenada inválida para colocar um  navio\n");
+    }
+
+    //Validação e Posicionamento do segundo navio na Diagonal (invertida)
+    if(verificaPosicaoHV(navioD[1][0], tamNavio, tamTabuleiro) && verificaPosicaoHV(navioD[1][1], tamNavio, tamTabuleiro) && navioD[1][1] >=2 ){// verifica posições dentro do tabuleiro 
+        resultado = 0;      
+        for (int i = 0; i < tamNavio; i++)//verifica posições ocupadas
+        {
+            resultado += verificaElemento(tabuleiro, navioD[1][0] + i, navioD[1][1] + i);
+        }if(resultado == 0){
+             for (int i = 0; i < tamNavio; i++)
+            {
+            tabuleiro[navioD[1][0] + i][navioD[1][1] - i] = 3;
+            }
+         }else{
+            printf("Foi inserida um coordenada já ocupada por um navio\n");
+         }       
     }else{
         printf("Foi inserida um coordenada inválida para colocar um  navio\n");
     }
@@ -70,11 +145,6 @@ int main() {
         printf("\n");
         
     }
-
-    // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
-    // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
-    // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
-    // Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
 
     // Nível Mestre - Habilidades Especiais com Matrizes
     // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
