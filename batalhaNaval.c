@@ -5,7 +5,9 @@
 // Siga os comentários para implementar cada parte do desafio.
 // Aluno: Edgar Nicolau Fardin
 
-#define tamTabuleiro 10
+#define tamTabuleiro 10 //quantidade de linhas e colunas da matriz tabuleiro
+#define habilidadex 3 //quantidade de linhas da matriz habilidade
+#define habilidadey 5 //quantidade de colunas da matriz habilidade
 
 //função para verificar se a posição ja tem um navio
 int verificaElemento(int matriz[tamTabuleiro][tamTabuleiro], int linha, int coluna){
@@ -27,6 +29,20 @@ int verificaPosicaoHV(int posicao, int tamanhoNavio, int tamanhoMatriz){
     }
 }
 
+//função para colcoar a habilidade na matriz uqe já possui os navios
+void usarHabilidade(int tabuleiro[tamTabuleiro][tamTabuleiro], int habilidade[habilidadex][habilidadey], int corrdx, int coordy){
+    for(int i = 0; i < habilidadex; i++){
+        for(int j = 0; j < habilidadey; j++){
+            int x = corrdx + i;
+            int y = coordy + j - 2;
+
+            if(tabuleiro[x][y] == 0 && habilidade[i][j] == 5){
+                tabuleiro[x][y] = 5;
+            }            
+        }
+    }
+}
+
 int main() {
 
     // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
@@ -38,18 +54,23 @@ int main() {
     // Área para declaração de variáveis
     int tabuleiro[tamTabuleiro][tamTabuleiro];
     char linha[11] = {' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
-
-    int habCone[3][5];
-    int habOctaedro[3][5];
-    int habCruz[3][5];
-    int centro = 2;
-
-    int navioH[1][2] = {{0,0}}; //coordenadas do navio na horizontal
-    int navioV[1][2] = {{7,9}}; //coordenadas do navio na vertical
-    int navioD[2][2] = {{4,1},{2,6}}; //coordenadas dos navios na diagonal
     int tamNavio = 3; // tamanho dos navios
 
-    int resultado = 0; // para saber se posição é ocupada
+    //Matrizes e centro de habilidades
+    int habCone[habilidadex][habilidadey];
+    int habOctaedro[habilidadex][habilidadey];
+    int habCruz[habilidadex][habilidadey];
+    int centro = 2;
+
+    //Coordenadas de navios e inicio de habilidades
+    int navioH[1][2] = {{0,0}};
+    int navioV[1][2] = {{7,9}};
+    int navioD[2][2] = {{4,1},{2,6}};
+    int coordCone[1][2] = {{0,2}};
+    int coordOctaedro[1][2] = {{7,7}};
+    int coordCrus[1][2] = {{4,6}};    
+
+    int resultado = 0; // para saber se posição é ocupada por um navio
 
     //inicializando tabuleiro com 0
     for (int i = 0; i < 10; i++)
@@ -180,7 +201,12 @@ int main() {
     for (int i = 0; i < 3; i++) {
         habCruz[i][centro] = 5;
     }
-    
+
+    //colocar habilidades no tabuleiro
+    usarHabilidade(tabuleiro, habCone, coordCone[0][0], coordCone[0][1]);    
+    usarHabilidade(tabuleiro, habCruz, coordCrus[0][0], coordCrus[0][1]);
+    usarHabilidade(tabuleiro, habOctaedro, coordOctaedro[0][0], coordOctaedro[0][1]);
+
     //Imprimindo tabuleiro
     printf("**** TABULEIRO BATALHA NAVAL ****\n\n");
     for (int i = 0; i < 11; i++)
@@ -192,7 +218,7 @@ int main() {
 
     for (int i = 0; i < 10; i++)
     {
-        printf("%2d ", i + 1);
+        printf("%2d ", i);
         for (int j = 0; j < 10; j++)
         {
             printf("%2d ", tabuleiro[i][j]);
