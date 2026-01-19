@@ -5,8 +5,10 @@
 // Siga os comentários para implementar cada parte do desafio.
 // Aluno: Edgar Nicolau Fardin
 
+#define tamTabuleiro 10
+
 //função para verificar se a posição ja tem um navio
-int verificaElemento(int matriz[10][10], int linha, int coluna){
+int verificaElemento(int matriz[tamTabuleiro][tamTabuleiro], int linha, int coluna){
     if(matriz[linha][coluna] == 0){
         return 0;
     }else if(matriz[linha][coluna] == 3){
@@ -34,9 +36,13 @@ int main() {
 
 
     // Área para declaração de variáveis
-    int tamTabuleiro = 10;
     int tabuleiro[tamTabuleiro][tamTabuleiro];
     char linha[11] = {' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
+
+    int habCone[3][5];
+    int habOctaedro[3][5];
+    int habCruz[3][5];
+    int centro = 2;
 
     int navioH[1][2] = {{0,0}}; //coordenadas do navio na horizontal
     int navioV[1][2] = {{7,9}}; //coordenadas do navio na vertical
@@ -66,10 +72,10 @@ int main() {
             tabuleiro[navioH[0][0]][navioH[0][1] + i] = 3;
             }
          }else{
-            printf("Foi inserida um coordenada já ocupada por um navio\n");
+            printf("Navio 1: Foi inserida um coordenada já ocupada por um navio\n");
          }        
     }else{
-        printf("Foi inserida um coordenada inválida para colocar um  navio\n");
+        printf("Navio 1: Foi inserida um coordenada inválida para colocar um  navio\n");
     }
 
     //Validação e Posicionamento do navio na vertical
@@ -84,10 +90,10 @@ int main() {
             tabuleiro[navioV[0][0] + i][navioV[0][1]] = 3;
             }
          }else{
-            printf("Foi inserida um coordenada já ocupada por um navio\n");
+            printf("Navio 2: Foi inserida um coordenada já ocupada por um navio\n");
          }       
     }else{
-        printf("Foi inserida um coordenada inválida para colocar um  navio\n");
+        printf("Navio 2: Foi inserida um coordenada inválida para colocar um  navio\n");
     }
 
     //Validação e Posicionamento do navio na Diagonal
@@ -102,10 +108,10 @@ int main() {
             tabuleiro[navioD[0][0] + i][navioD[0][1] + i] = 3;
             }
          }else{
-            printf("Foi inserida um coordenada já ocupada por um navio\n");
+            printf("Navio 3: Foi inserida um coordenada já ocupada por um navio\n");
          }       
     }else{
-        printf("Foi inserida um coordenada inválida para colocar um  navio\n");
+        printf("Navio 3: Foi inserida um coordenada inválida para colocar um  navio\n");
     }
 
     //Validação e Posicionamento do segundo navio na Diagonal (invertida)
@@ -120,10 +126,59 @@ int main() {
             tabuleiro[navioD[1][0] + i][navioD[1][1] - i] = 3;
             }
          }else{
-            printf("Foi inserida um coordenada já ocupada por um navio\n");
+            printf("Navio 4: Foi inserida um coordenada já ocupada por um navio\n");
          }       
     }else{
-        printf("Foi inserida um coordenada inválida para colocar um  navio\n");
+        printf("Navio 4: Foi inserida um coordenada inválida para colocar um  navio\n");
+    }
+
+    //Matriz habilidade cone:
+    // Zera a matriz
+    for(int i = 0; i < 3; i++){
+        for(int j = 0; j < 5; j++){
+            habCone[i][j] = 0;
+        }
+    }
+    // Marca o cone
+    for(int i = 0; i < 3; i++){
+        for(int j = 0; j <= i; j++){
+            habCone[i][centro - j] = 5;
+            habCone[i][centro + j] = 5;
+        }
+    }
+
+    //Matriz habilidade octaedro:
+    // Zera a matriz
+    for(int i = 0; i < 3; i++){
+        for(int j = 0; j < 5; j++){
+            habOctaedro[i][j] = 0;
+        }
+    }
+    // Marca o octaedro
+    // Linha central (horizontal)
+    for (int j = 1; j <= 3; j++) {
+        habOctaedro[1][j] = 5;
+    }
+    // Coluna central (vertical)
+    for (int i = 0; i < 3; i++) {
+        habOctaedro[i][centro] = 5;
+    }
+
+    //Matriz habilidade Cruz:
+    // Zera a matriz
+    for(int i = 0; i < 3; i++){
+        for(int j = 0; j < 5; j++){
+            habCruz[i][j] = 0;
+        }
+    }
+    // Marca a Cruz
+    // Linha central (horizontal)
+    for (int j = 0; j < 5; j++) {
+        habCruz[1][j] = 5;
+    }
+    // Coluna central (vertical)
+    for (int i = 0; i < 3; i++) {
+        habCruz[i][centro] = 5;
     }
     
     //Imprimindo tabuleiro
@@ -145,6 +200,8 @@ int main() {
         printf("\n");
         
     }
+
+    printf("\nLegenda: 0 = Água, 3 = Navio, 5 = Habilidade\n\n");
 
     // Nível Mestre - Habilidades Especiais com Matrizes
     // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
